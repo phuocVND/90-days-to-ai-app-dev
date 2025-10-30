@@ -1,9 +1,9 @@
-from dataclasses import dataclass
+from pydantic import BaseModel
 
-@dataclass
-class Weather:
+class Weather(BaseModel):
     city: str
-    temp: float
-    humidity: int
-    wind_speed: float
-    description: str
+    temp: float | None
+    humidity: int | None
+    wind_speed: float | None
+    description: str | None
+    error: str | None = None
