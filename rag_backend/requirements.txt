@@ -8,3 +8,4 @@ httpx
 scikit-learn
 joblib
 pydantic
+PyPDF2

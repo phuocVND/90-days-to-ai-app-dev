@@ -25,7 +25,7 @@ def get_top_chunks(question, top_k=1):
     return [chunks[i] for i in top_idx]
 
 # 5️⃣ Câu hỏi ví dụ
-question = "Inverter có vai trò gì trong hệ thống năng lượng mặt trời?"
+question = "What role does an inverter play in a solar power system?"
 
 top_chunks = get_top_chunks(question, top_k=1)
 context = "\n".join(top_chunks)
