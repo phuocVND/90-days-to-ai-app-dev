@@ -2,9 +2,19 @@ POST http://127.0.0.1:8000/api/ask
 Content-Type: application/json
 
 {
-  "question": "You approach a traffic signal with a flashing red light. According to the MUTCD, what is the driver required to do?",
+  "question": "You are riding a motorcycle without wearing a helmet. Is this against the law?",
   "top_k": 3
 }
+
+
+
+# You see a white, square sign with a black border that says "RIGHT LANE MUST EXIT." According to the MUTCD, what does this sign mean?
+
+# You approach a traffic signal with a flashing red light. According to the MUTCD, what is the driver required to do?
+
+# You see a solid yellow line painted on your side of the center of the road. Based on the MUTCD and standard road rules, what does this line indicate, and are you allowed to pass another vehicle?
+
+# A pentagon-shaped sign is ahead. What type of area or facility is this sign most likely indicating, according to the MUTCD standard shapes?
 
 # You are driving a car after drinking alcohol. Are you violating the traffic law?
 
@@ -46,13 +56,3 @@ Content-Type: application/json
 
 # You drive a car while having no driver’s license. What violation is this considered?
 
-
-# Group 1: Traffic Signs & Signals (Based on the MUTCD)
-
-# You see a white, square sign with a black border that says "RIGHT LANE MUST EXIT." According to the MUTCD, what does this sign mean?
-
-# You approach a traffic signal with a flashing red light. According to the MUTCD, what is the driver required to do?
-
-# You see a solid yellow line painted on your side of the center of the road. Based on the MUTCD and standard road rules, what does this line indicate, and are you allowed to pass another vehicle?
-
-# A pentagon-shaped sign is ahead. What type of area or facility is this sign most likely indicating, according to the MUTCD standard shapes?

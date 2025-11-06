@@ -45,7 +45,7 @@ class PDFModel:
         text = self._clean_text(text)
 
         # Regex mạnh hơn: chia theo . ! ? nhưng vẫn giữ dấu chấm trong câu viết tắt
-        sentences = re.split(r'(?<=[.])\s+(?=[A-Z0-9])', text)
+        sentences = re.split(r'(?<=[.!])\s+(?=[A-Z0-9])', text)
         chunks, current_chunk, word_count = [], [], 0
 
         for sentence in sentences:
@@ -85,4 +85,11 @@ class PDFModel:
         return prompt
     
     def answer_question(self, prompt):
-        return self.qa_pipeline(prompt, max_length=512)[0]['generated_text']
+        return self.qa_pipeline(
+            prompt,
+            max_new_tokens=512,  # sinh tối đa 256 token mới
+            temperature=0.3,     # giảm tính sáng tạo, tăng độ chính xác
+            top_p=0.9,           # lọc token ít khả năng
+            do_sample=True        # sampling để có câu trả lời linh hoạt hơn
+        )[0]['generated_text']
+
