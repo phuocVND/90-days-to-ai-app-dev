@@ -2,7 +2,7 @@ POST http://127.0.0.1:8000/api/ask
 Content-Type: application/json
 
 {
-  "question": "You are riding a motorcycle without wearing a helmet. Is this against the law?",
+  "question": "You drive a car that does not have a valid technical inspection certificate. Are you breaking the law?",
   "top_k": 3
 }
 

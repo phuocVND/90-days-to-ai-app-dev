@@ -12,8 +12,12 @@ class PDFModel:
         self.max_sentences = 1
         self.max_words = 1024
         self.folder = folder
-        self.embed_model = SentenceTransformer("multi-qa-MiniLM-L6-cos-v1")
-        self.qa_pipeline = pipeline("text2text-generation", model="google/flan-t5-base")
+        self.embed_model = SentenceTransformer("all-MiniLM-L6-v2")
+        self.qa_pipeline = pipeline(
+            "text2text-generation",
+            model="bigscience/bloomz-1b1",
+            device=-1  # -1 = CPU
+        ) 
         self.chunks, self.chunk_embeddings = self._prepare_data()
 
         
