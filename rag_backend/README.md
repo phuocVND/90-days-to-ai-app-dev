@@ -1,22 +1,60 @@
-mkdir -p crypto_predictor/app/models
-mkdir -p crypto_predictor/app/services
-mkdir -p crypto_predictor/app/controllers
-mkdir -p crypto_predictor/app/schemas
-
-touch crypto_predictor/app/main.py
-touch crypto_predictor/app/__init__.py
-touch crypto_predictor/app/models/price_model.py
-touch crypto_predictor/app/models/__init__.py
-touch crypto_predictor/app/services/data_fetcher.py
-touch crypto_predictor/app/services/predictor.py
-touch crypto_predictor/app/services/__init__.py
-touch crypto_predictor/app/controllers/predict_controller.py
-touch crypto_predictor/app/controllers/__init__.py
-touch crypto_predictor/app/schemas/price_schema.py
-touch crypto_predictor/app/schemas/__init__.py
-touch crypto_predictor/requirements.txt
-touch crypto_predictor/README.md
-
+admin@admins-Mac-mini-2 rag_backend % tree
+.
+├── README.md
+├── api_test.rest
+├── app
+│   ├── __init__.py
+│   ├── __pycache__
+│   │   ├── __init__.cpython-310.pyc
+│   │   └── main.cpython-310.pyc
+│   ├── api
+│   │   ├── __init__.py
+│   │   ├── __pycache__
+│   │   │   └── __init__.cpython-310.pyc
+│   │   └── routes
+│   │       ├── __init__.py
+│   │       ├── __pycache__
+│   │       │   ├── __init__.cpython-310.pyc
+│   │       │   └── ask_router.cpython-310.pyc
+│   │       └── ask_router.py
+│   ├── core
+│   │   ├── __init__.py
+│   │   ├── __pycache__
+│   │   │   ├── __init__.cpython-310.pyc
+│   │   │   ├── config.cpython-310.pyc
+│   │   │   ├── controller.cpython-310.pyc
+│   │   │   └── predict_controller.cpython-310.pyc
+│   │   └── config.py
+│   ├── main.py
+│   ├── models
+│   │   ├── __init__.py
+│   │   ├── __pycache__
+│   │   │   ├── __init__.cpython-310.pyc
+│   │   │   ├── model.cpython-310.pyc
+│   │   │   └── price_model.cpython-310.pyc
+│   │   └── model.py
+│   ├── schemas
+│   │   ├── __init__.py
+│   │   ├── __pycache__
+│   │   │   ├── __init__.cpython-310.pyc
+│   │   │   ├── price_schema.cpython-310.pyc
+│   │   │   └── schema.cpython-310.pyc
+│   │   └── schema.py
+│   └── services
+│       ├── __init__.py
+│       ├── __pycache__
+│       │   ├── __init__.cpython-310.pyc
+│       │   ├── data_fetcher.cpython-310.pyc
+│       │   ├── predictor.cpython-310.pyc
+│       │   └── service.cpython-310.pyc
+│       └── service.py
+├── data
+│   ├── Photovoltaic_systems.pdf
+│   ├── Solar-Basics.pdf
+│   ├── WK3-GE-MC3-PVintro.pdf
+│   └── handbook_for_solar_pv_systems.pdf
+├── main.py
+└── requirements.txt
 
 
 pip3 install -r requirements.txt

@@ -1,1 +1,1 @@
-from .schema import PriceRequest, PriceResponse
+from .schema import QuestionRequest, AnswerResponse

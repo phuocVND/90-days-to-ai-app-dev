@@ -1,1 +1,1 @@
-from .model import PriceModel
+from .model import PDFModel

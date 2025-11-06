@@ -1,1 +1,7 @@
-GET http://127.0.0.1:8000/api/predict_live?symbol=BTCUSDT&timeframe=15m
+POST http://127.0.0.1:8000/api/ask
+Content-Type: application/json
+
+{
+  "question": "What is energy",
+  "top_k": 3
+}
