@@ -2,30 +2,50 @@ import os
 import numpy as np
 from sentence_transformers import SentenceTransformer
 from transformers import pipeline
-import PyPDF2
+import fitz  # PyMuPDF
+import os
 import re
+import textwrap
 
 class PDFModel:
     def __init__(self, folder="data"):
+        self.max_sentences = 1
+        self.max_words = 1024
         self.folder = folder
-        self.embed_model = SentenceTransformer("paraphrase-MiniLM-L3-v2")
-        self.qa_pipeline = pipeline("text2text-generation", model="google/flan-t5-small")
+        self.embed_model = SentenceTransformer("multi-qa-MiniLM-L6-cos-v1")
+        self.qa_pipeline = pipeline("text2text-generation", model="google/flan-t5-base")
         self.chunks, self.chunk_embeddings = self._prepare_data()
+
+        
+    def _clean_text(self, text):
+        # Chuẩn hóa xuống dòng và khoảng trắng
+        text = text.replace('\xa0', ' ')  # loại bỏ ký tự space đặc biệt
+        text = text.replace('\r', ' ').replace('\n', ' ')
+        text = re.sub(r'\s+', ' ', text)
+        # Xóa ký tự không ASCII
+        text = re.sub(r'[^\x00-\x7F]+', ' ', text)
+        return text.strip()
 
     def _read_all_pdfs(self):
         text = ""
         for filename in os.listdir(self.folder):
             if filename.lower().endswith(".pdf"):
-                with open(os.path.join(self.folder, filename), "rb") as f:
-                    reader = PyPDF2.PdfReader(f)
-                    for page in reader.pages:
-                        page_text = page.extract_text()
-                        if page_text:
-                            text += page_text + "\n"
+                pdf_path = os.path.join(self.folder, filename)
+                print(f"📖 Reading file: {pdf_path}")
+                with fitz.open(pdf_path) as doc:
+                    for i, page in enumerate(doc):
+                        page_text = page.get_text("text")
+                        if page_text.strip():
+                            text += page_text.strip() + " "
+                        else:
+                            print(f"⚠️ Warning: Page {i+1} of {filename} has no text.")
         return text
 
-    def _split_into_chunks(self, text, max_sentences=5, max_words=1024):
-        sentences = re.split(r'(?<=[. ! ? ])\s+', text.strip())
+    def _split_into_chunks(self, text, max_sentences, max_words):
+        text = self._clean_text(text)
+
+        # Regex mạnh hơn: chia theo . ! ? nhưng vẫn giữ dấu chấm trong câu viết tắt
+        sentences = re.split(r'(?<=[.])\s+(?=[A-Z0-9])', text)
         chunks, current_chunk, word_count = [], [], 0
 
         for sentence in sentences:
@@ -34,7 +54,7 @@ class PDFModel:
                 chunks.append(" ".join(current_chunk))
                 current_chunk, word_count = [], 0
 
-            current_chunk.append(sentence)
+            current_chunk.append(sentence.strip())
             word_count += len(words)
 
         if current_chunk:
@@ -45,7 +65,7 @@ class PDFModel:
 
     def _prepare_data(self):
         text = self._read_all_pdfs()
-        chunks = self._split_into_chunks(text)
+        chunks = self._split_into_chunks(text, self.max_sentences, self.max_words)
         embeddings = self.embed_model.encode(chunks, show_progress_bar=True)
         return chunks, embeddings
 
@@ -57,23 +77,12 @@ class PDFModel:
     
     def build_prompt(self, question, top_k):
         context = "\n".join(self.get_top_chunks(question, top_k))
-        prompt = f"""
-        You are a knowledgeable assistant. Please answer the following question based strictly on the reference document provided below. 
-        If the answer is not found, say "The information is not available in the provided document.
-
-        Question:
-        {question}
-
-        Below is the reference document. 
-        Use the information in it to answer the question above accurately and concisely.
-
-        Reference Document:
-        ----------------------------------------
-        {context}
-        ----------------------------------------
-        """
-
+        prompt = (
+            f"Question:{question}"
+            f"Please answer the following question based strictly on the reference document provided below."
+            f"Reference document:{context}"
+        )
         return prompt
     
     def answer_question(self, prompt):
-        return self.qa_pipeline(prompt, max_length=256)[0]['generated_text']
+        return self.qa_pipeline(prompt, max_length=512)[0]['generated_text']

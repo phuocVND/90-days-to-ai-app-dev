@@ -60,4 +60,4 @@ admin@admins-Mac-mini-2 rag_backend % tree
 pip3 install -r requirements.txt
 
 
-uvicorn app.main:app --reload
+uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
