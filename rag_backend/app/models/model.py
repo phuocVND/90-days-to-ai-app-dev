@@ -3,6 +3,7 @@ import numpy as np
 from sentence_transformers import SentenceTransformer
 from transformers import pipeline
 import PyPDF2
+import re
 
 class PDFModel:
     def __init__(self, folder="data"):
@@ -23,9 +24,24 @@ class PDFModel:
                             text += page_text + "\n"
         return text
 
-    def _split_into_chunks(self, text, max_words=500):
-        words = text.split()
-        return [" ".join(words[i:i+max_words]) for i in range(0, len(words), max_words)]
+    def _split_into_chunks(self, text, max_sentences=5, max_words=1024):
+        sentences = re.split(r'(?<=[. ! ? ])\s+', text.strip())
+        chunks, current_chunk, word_count = [], [], 0
+
+        for sentence in sentences:
+            words = sentence.split()
+            if len(current_chunk) >= max_sentences or (word_count + len(words)) > max_words:
+                chunks.append(" ".join(current_chunk))
+                current_chunk, word_count = [], 0
+
+            current_chunk.append(sentence)
+            word_count += len(words)
+
+        if current_chunk:
+            chunks.append(" ".join(current_chunk))
+
+        return chunks
+
 
     def _prepare_data(self):
         text = self._read_all_pdfs()
@@ -41,12 +57,22 @@ class PDFModel:
     
     def build_prompt(self, question, top_k):
         context = "\n".join(self.get_top_chunks(question, top_k))
-        prompt = (
-            f"Below is the reference document:"
-            f"{context}"
-            f"Please answer the following question based on the document above:"
-            f"{question}"
-        )
+        prompt = f"""
+        You are a knowledgeable assistant. Please answer the following question based strictly on the reference document provided below. 
+        If the answer is not found, say "The information is not available in the provided document.
+
+        Question:
+        {question}
+
+        Below is the reference document. 
+        Use the information in it to answer the question above accurately and concisely.
+
+        Reference Document:
+        ----------------------------------------
+        {context}
+        ----------------------------------------
+        """
+
         return prompt
     
     def answer_question(self, prompt):

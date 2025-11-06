@@ -2,6 +2,6 @@ POST http://127.0.0.1:8000/api/ask
 Content-Type: application/json
 
 {
-  "question": "What is energy",
+  "question": "What is solar energy?",
   "top_k": 3
 }
