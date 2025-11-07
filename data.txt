@@ -1,8 +1,0 @@
-Tấm pin mặt trời là thiết bị chuyển đổi ánh sáng mặt trời thành điện năng thông qua hiệu ứng quang điện. 
-Chúng thường được làm từ silicon và có tuổi thọ trung bình khoảng 25 năm.
-
-Bộ biến tần (inverter) có chức năng chuyển đổi điện một chiều (DC) từ tấm pin thành điện xoay chiều (AC) để sử dụng trong gia đình. 
-Việc bảo trì định kỳ giúp inverter hoạt động ổn định và hiệu quả hơn.
-
-Hiệu suất của tấm pin mặt trời phụ thuộc vào nhiều yếu tố như góc chiếu sáng, nhiệt độ môi trường, và độ sạch của bề mặt. 
-Làm sạch tấm pin định kỳ giúp tăng hiệu suất thu năng lượng.
