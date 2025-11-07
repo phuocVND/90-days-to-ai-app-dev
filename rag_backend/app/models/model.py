@@ -15,7 +15,7 @@ class PDFModel:
         self.embed_model = SentenceTransformer("all-MiniLM-L6-v2")
         self.qa_pipeline = pipeline(
             "text2text-generation",
-            model="bigscience/bloomz-1b1",
+            model="bigscience/bloomz-560m",
             device=-1  # -1 = CPU
         ) 
         self.chunks, self.chunk_embeddings = self._prepare_data()
@@ -82,9 +82,9 @@ class PDFModel:
     def build_prompt(self, question, top_k):
         context = "\n".join(self.get_top_chunks(question, top_k))
         prompt = (
-            f"Question:{question}"
-            f"Please answer the following question based strictly on the reference document provided below."
-            f"Reference document:{context}"
+            f"Question:\n{question}\n\n"
+            "Please answer the following question based strictly on the reference document provided below.\n\n"
+            f"Reference document:\n{context}\n"
         )
         return prompt
     

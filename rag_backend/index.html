@@ -3,26 +3,62 @@
 <head>
   <meta charset="UTF-8">
   <title>Call API Demo</title>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 20px; }
+    input, select { padding: 5px; margin-right: 10px; }
+    button { padding: 5px 10px; }
+    pre { background: #f4f4f4; padding: 10px; border-radius: 5px; max-width: 700px; white-space: pre-wrap; }
+  </style>
 </head>
 <body>
-  <h1>Call API trực tiếp</h1>
-  <input type="text" id="inputData" placeholder="Nhập dữ liệu"/>
+  <h1>RAG luật giao thông liên bang Mỹ (MUTCD)</h1>
+  
+  <input type="text" id="inputData" placeholder="Enter your question"/>
+  
+  <label for="topK">Top K:</label>
+  <select id="topK">
+    <script>
+      for (let i = 1; i <= 10; i++) {
+        document.write(`<option value="${i}">${i}</option>`);
+      }
+    </script>
+  </select>
+  
   <button onclick="callAPI()">Send</button>
+  
   <pre id="response"></pre>
 
   <script>
     async function callAPI() {
-      const input = document.getElementById('inputData').value;
+      const question = document.getElementById('inputData').value.trim();
+      const top_k = parseInt(document.getElementById('topK').value);
+
+      if (!question) {
+        alert("Vui lòng nhập câu hỏi!");
+        return;
+      }
+
+      const responseEl = document.getElementById('response');
+      responseEl.textContent = "Đang chờ phản hồi từ server...";
+
       try {
-        const res = await fetch('https://your-api-url.com/endpoint', {
+        const res = await fetch('http://0.0.0.0:8000/api/ask', {
           method: 'POST',
           headers: {'Content-Type': 'application/json'},
-          body: JSON.stringify({data: input})
+          body: JSON.stringify({
+            question: question,
+            top_k: top_k
+          })
         });
+
+        if (!res.ok) {
+          throw new Error(`HTTP error! status: ${res.status}`);
+        }
+
         const data = await res.json();
-        document.getElementById('response').textContent = JSON.stringify(data, null, 2);
+        responseEl.textContent = JSON.stringify(data, null, 2);
       } catch (err) {
-        document.getElementById('response').textContent = err;
+        responseEl.textContent = "Error: " + err;
       }
     }
   </script>
